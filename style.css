@@ -1,11 +1,11 @@
-.image{
+.cardsClass{
 	height: 100px;
 	width: 100px;
 }
 
 #grid{
-	width: 500px;
-	height: 500px;
+	width: 400px;
+	height: 400px;
 	flex-wrap: wrap;
 	margin: 0;
 }

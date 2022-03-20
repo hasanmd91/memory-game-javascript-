@@ -46,38 +46,88 @@ const cardArray = [
 	{
 		name:"picture",
 		img: "images/picture.png",
-	},
+	}
 ]
 
-cardArray.sort(() => 0.5 - Math.random())
-const chosenCArd =[];
+const cardArraySorted = cardArray.sort(() => 0.5 - Math.random())
 
 
-const gridDisplay = document.getElementById("grid")
+const grid = document.getElementById("grid")
+const resultDisplay = document.getElementById("result")
 
-function createBoard () {
-	for(let i=0; i<10; i++){
-		const card = document.createElement("img");
-		card.setAttribute("src"," Images/pizza.png")
-		card.setAttribute("data-id", i);
-		card.setAttribute("class","image")
-		card.addEventListener("click",flipcard)
-		gridDisplay.appendChild(card)
-		console.log(gridDisplay)
-	
+let cardsChosen = []
+let cardsChosenId = []
+let cardsWon = []
+
+
+//create board 
+
+function createBoard(){
+	for(let i = 0; i <cardArraySorted.length; i++){
+		const card = document.createElement("img")
+		card.setAttribute("src","images/man.png")
+		card.setAttribute("data-id",i)
+		card.setAttribute("class","cardsClass")
+		card.addEventListener("click", flipCard)
+		grid.appendChild(card)
+		console.log(card)
+
+	}
+}
+function checkForMatch(){
+
+	const cards = document.querySelectorAll("img")
+	const optionOneId = cardsChosenId[0]
+	const optionTwoId = cardsChosenId[1]
+
+	if(optionOneId == optionTwoId){
+
+		cards[optionOneId].setAttribute("src","images/man.png")
+		cards[optionTwoId].setAttribute("src","images/man.png")
+		alert("you have clicked the same image ")
+
+	}
+
+	else if(cardsChosen[0] === cardsChosen[1]){
+		alert("you have found a match")
+		cards[optionOneId].setAttribute("src","images/white.png")
+		cards[optionTwoId].setAttribute("src","images/white.png")
+		cards[optionOneId].removeEventListener("click",flipCard)
+		cards[optionTwoId].removeEventListener("click",flipCard)
+		cardsWon.push(cardsChosen)
+
+	}
+	else {
+
+		cards[optionOneId].setAttribute("src","images/man.png")
+		cards[optionTwoId].setAttribute("src","images/man.png")
+		alert("sorry try again")
+
+	}
+
+	cardsChosen = []
+	cardsChosenId = []
+
+	resultDisplay.textContent = cardsWon.length
+
+	if(cardsWon.length === cardArraySorted/2 ){
+		resultDisplay.textContent ="congratulations you have found all the matches"
+	}
+
+}
+
+function flipCard(){
+
+	let cardId = this.getAttribute("data-id")
+	cardsChosen.push(cardArraySorted[cardId].name)
+	cardsChosenId.push(cardArraySorted[cardId])
+	this.setAttribute("src",cardArraySorted[cardId].img)
+	console.log(cardsChosen)
+	console.log(cardsChosenId)
+	if(cardsChosen.length === 2 ){
+		setTimeout(checkForMatch, 500)
 	}
 }
 
 createBoard()
 
-function flipcard(){
-
-const cardID = this.getAttribute("data-id")
-console.log("clicked",cardID)
-
-console.log(cardArray[cardID].name )
-chosenCArd.push(cardArray[cardID])
-this.setAttribute("src",cardArray[cardID].img )
-
-
-}
